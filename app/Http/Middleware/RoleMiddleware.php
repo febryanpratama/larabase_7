@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Utils\ResponseCode;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,12 +20,17 @@ class RoleMiddleware
         $user = Auth::user();
 
         if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return ResponseCode::unauthorized('Unauthorized: Please login first.');
         }
 
-        // cek apakah role user ada di daftar roles yg diizinkan
+        // No role relation found
+        if (!isset($user->role)) {
+            return ResponseCode::forbidden('Access denied. Role not found.');
+        }
+
+        // Role not allowed
         if (!in_array($user->role->name, $roles)) {
-            return response()->json(['error' => 'Forbidden: You don\'t have access'], 403);
+            return ResponseCode::forbidden("Access denied. You don't have permission to access this resource.");
         }
 
         return $next($request);
