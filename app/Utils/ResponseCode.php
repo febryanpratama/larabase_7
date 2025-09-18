@@ -30,6 +30,27 @@ class ResponseCode
         ], 201);
     }
 
+    public static function successPaginate($paginator, string $message = 'Data berhasil diambil.'): JsonResponse
+    {
+        return response()->json([
+            'status'  => 'success',
+            'code'    => 200,
+            'message' => $message,
+            'data'    => $paginator->items(),
+            'meta'    => [
+                'current_page'   => $paginator->currentPage(),
+                'from'           => $paginator->firstItem(),
+                'last_page'      => $paginator->lastPage(),
+                'next_page_url'  => $paginator->nextPageUrl(),
+                'path'           => $paginator->path(),
+                'per_page'       => $paginator->perPage(),
+                'prev_page_url'  => $paginator->previousPageUrl(),
+                'to'             => $paginator->lastItem(),
+                'total'          => $paginator->total(),
+            ]
+        ], 200);
+    }
+
     // ============================
     // Error Responses
     // ============================

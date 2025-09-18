@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PlannerController;
 use App\Http\Controllers\Api\TodoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,14 @@ Route::middleware(['auth:api', 'role:employee,admin'])->group(function () {
             Route::post('/', [TodoController::class, 'store'])->name('employee.todo.store');
             Route::put('/{id}', [TodoController::class, 'update'])->name('employee.todo.update');
             Route::delete('/{id}', [TodoController::class, 'destroy'])->name('employee.todo.delete');
+        });
+
+        Route::prefix('planner')->group(function(){
+            Route::get('/', [PlannerController::class, 'index'])->name('employee.planner.index');
+            Route::post('/', [PlannerController::class, 'store'])->name('employee.planner.store');
+            Route::put('/{id}', [PlannerController::class, 'update'])->name('employee.planner.update');
+            Route::delete('/{id}', [PlannerController::class, 'destroy'])->name('employee.planner.delete');
+            
         });
     });
 });

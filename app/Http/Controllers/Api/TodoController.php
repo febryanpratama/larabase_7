@@ -18,9 +18,11 @@ class TodoController extends Controller
      */
     public function index(Request $request)
     {
-        $todos = TodoEmployee::with('assigns')->where('user_id', auth()->user()->id)->get();
+        $perPage = $request->get('per_page', 20); // default 20
+        $todos = TodoEmployee::with('assigns')->where('user_id', auth()->user()->id)->paginate($perPage);
 
-        return ResponseCode::successGet($todos, 'Daftar todo berhasil diambil.');
+        return ResponseCode::successPaginate($todos, 'Daftar Todo berhasil diambil.');
+
     }
 
     /**
@@ -150,7 +152,7 @@ class TodoController extends Controller
         return ResponseCode::successGet($todo->load('assigns'), 'Todo berhasil diperbarui.');
     }
 
-    
+
     public function destroy($id)
     {
         $todo = TodoEmployee::find($id);
